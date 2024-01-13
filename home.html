@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Birthday Invitation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            transition: background-image 0.5s, color 0.5s;
+            background-image: url('light.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        body.dark-mode {
+            background-image: url('dark.jpg');
+            color: #fff;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20% 10% 20% 10%;
+            padding: 20px;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        section.dark-mode {
+            background-color: #333;
+        }
+
+        h1, h2, h3 {
+            margin: 10px 0;
+            color: inherit;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        p {
+            margin: 20px 0;
+            color: inherit;
+            font-size: 24px;
+        }
+
+        button#toggle-dark-mode {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none; 
+            outline: none;
+            margin-top: 20px;
+            color: #000;
+        }
+
+        button#view-invitation, button#accept-invitation {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: 2px solid #000;
+            outline: none;
+            margin-top: 20px;
+            color: #000;
+        }
+
+        body.dark-mode button#view-invitation, body.dark-mode button#accept-invitation {
+            border: 2px solid #fff;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            #container {
+                width: 90%;
+            }
+
+            body {
+                background-size: contain;
+            }
+
+            h1, h2, h3 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            button {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <section id="cover" class="fade-in">
+            <h2>Join us to Celebrate</h2>
+            <h1>Somebody's</h1>
+            <h2>17th BIRTHDAY</h2>
+            <button id="view-invitation" onclick="window.location.href='date.html'">View Invitation</button>
+            <button id="toggle-dark-mode" onclick="toggleDarkMode()">🌙</button>
+        </section>
+    </div>
+
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        const eventDate = new Date('2024-07-27T15:45:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        setInterval(updateCountdown, 1000);
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            setCookie('darkMode', isDarkMode ? 'enabled' : 'disabled', 30);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const darkModeCookie = getCookie('darkMode');
+            if (darkModeCookie === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+
+        function setCookie(name, value, daysToLive) {
+            const date = new Date();
+            date.setTime(date.getTime() + daysToLive * 24 * 60 * 60 * 1000);
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+        }
+
+        function deleteCookie(name) {
+            setCookie(name, null, null);
+        }
+
+        function getCookie(name) {
+            const cookieDecoded = decodeURIComponent(document.cookie);
+            const cookieArr = cookieDecoded.split('; ');
+            let result = null;
+                
+            cookieArr.forEach(element => {
+                if (element.indexOf(name) === 0){
+                    result = element.substring(name.length + 1);
+                }
+            })
+            return result;
+        }
+    </script>
+</body>
+</html>
